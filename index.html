@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clasificación de la materia · Simulación interactiva (v11)</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#163047;background:#f5f8fc;--blue:#1267c5;--ink:#17304a;--line:#dce6f0;--shadow:0 16px 44px rgba(28,53,82,.09)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:23px 20px 36px}.shell{max-width:1200px;margin:auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:22px;margin-bottom:18px;flex-wrap:wrap}.eyebrow{color:#3374b9;font-size:13px;text-transform:uppercase;font-weight:780;letter-spacing:1.25px}.top h1{margin:4px 0 4px;font-size:clamp(27px,3.2vw,40px);line-height:1.08;letter-spacing:-1.25px}.sub{color:#627588;margin:0;font-size:15px}.tag{background:#eaf2ff;color:#1f5eaa;border:1px solid #d0e2fc;border-radius:99px;padding:8px 13px;font-size:13px;font-weight:700}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:17px;align-items:start}
+.panel,.side{background:white;border:1px solid #dce6f0;border-radius:20px;box-shadow:var(--shadow);overflow:hidden}.panelhead{padding:23px 26px 18px;border-bottom:1px solid #e8eef5}.kicker{display:flex;gap:9px;align-items:center;font-size:13px;color:#497997;font-weight:750;margin-bottom:7px}.kicker .pip{width:8px;height:8px;background:#30a0ec;border-radius:50%}.panelhead h2{font-size:clamp(23px,2.35vw,29px);letter-spacing:-.65px;margin:0 0 7px;color:var(--ink)}.panelhead p{font-size:16px;line-height:1.5;color:#465c72;margin:0;max-width:870px;min-height:48px}
+.stagewrap{padding:17px 20px 0}.stage{position:relative;border:1px solid #d5e5f5;border-radius:14px;overflow:hidden;background:#f7fbff}.stage canvas{display:block;width:100%;height:auto;cursor:crosshair}.stage .intro{position:absolute;inset:0;padding:clamp(12px,2.3vw,28px);background:linear-gradient(180deg,#f7fbff,#eff7ff);display:none;align-items:center;justify-content:center;overflow:auto}.intro.visible{display:flex}.infomap{width:min(100%,980px);margin:auto}.maptitle{margin:0 auto 16px;text-align:center;width:min(320px,46%);background:linear-gradient(180deg,#1670cf,#0d5cb2);color:#fff;padding:12px 20px;border-radius:14px;font-size:clamp(22px,3vw,34px);font-weight:850;box-shadow:0 10px 22px #153d6920;border:2px solid #0d4f97}.majorrow,.minorrow,.cards{display:grid;gap:16px}.majorrow{grid-template-columns:1fr 1fr;align-items:start;position:relative;margin:14px auto 10px;max-width:840px}.majorrow:before{content:'';position:absolute;left:24%;right:24%;top:-14px;height:8px;border-top:6px solid #1c7fe0;border-radius:999px}.major{position:relative;justify-self:center;min-width:220px;text-align:center;padding:14px 18px;border-radius:14px;font-size:clamp(21px,3vw,30px);font-weight:800;border:2px solid}.major.puras{background:linear-gradient(180deg,#d8e8fb,#bdd7f5);border-color:#234f87;color:#0d2f67}.major.mezclas{background:linear-gradient(180deg,#daf0df,#caeacd);border-color:#2a8a54;color:#114c28}.minorrow{grid-template-columns:repeat(4,1fr);max-width:980px;margin:6px auto 8px}.minor{justify-self:center;width:100%;max-width:225px;text-align:center;padding:10px 12px;border-radius:12px;font-size:clamp(16px,2.1vw,22px);font-weight:800;border:2px solid;line-height:1.12}.minor.simple,.minor.compuesto{background:#e2eefc;border-color:#4090e8;color:#113a70}.minor.homogenea,.minor.heterogenea{background:#dcf0e0;border-color:#2cb265;color:#114c28}.cards{grid-template-columns:repeat(4,1fr);max-width:980px;margin:auto}.card{padding:6px 6px 2px;text-align:center}.circlepair{display:flex;justify-content:center;gap:12px;align-items:flex-start;min-height:124px;margin-bottom:8px}.thumb{width:106px;height:106px;border:4px solid #20262d;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffff,#f1f5f9 78%);position:relative;box-shadow:0 4px 10px rgba(0,0,0,.08) inset}.thumb .dot,.thumb .bond{position:absolute}.dot{width:18px;height:18px;border-radius:50%;box-shadow:inset -2px -2px 3px #0003,0 1px 2px #0002}.blue{background:#2e73d7}.green{background:#27a58f}.orange{background:#f08b35}.red{background:#df3b3b}.yellow{background:#f2cf37}.purple{background:#a45bcb}.gray{background:#9da6b3}.bond{height:6px;border-radius:999px;background:#8491a0;transform-origin:center}.goto{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.goto button{appearance:none;border:1px solid #cadbea;background:#fff;color:#284866;border-radius:10px;padding:8px 10px;font-size:13px;font-weight:760;cursor:pointer;min-width:94px;transition:.15s}.goto button:hover,.goto button:focus-visible{background:#eaf3ff;border-color:#74a9f0;outline:0}.introhint{text-align:center;font-size:13px;color:#5d758a;margin:12px 0 0}.legend{padding:14px 25px 4px;display:flex;align-items:center;gap:12px 19px;flex-wrap:wrap;color:#54677a;font-size:13px;min-height:49px}.legend strong{font-weight:720;color:#2a4257}.legendentry{display:inline-flex;align-items:center;gap:7px}.atom{display:inline-block;width:13px;height:13px;border-radius:50%;box-shadow:inset -2px -3px 3px #0002}.micro{margin:7px 23px 14px;padding:10px 13px;border:1px solid #dceafb;border-radius:10px;background:#f5faff;color:#4e6a80;font-size:13px;line-height:1.4}
+.toolbar{border-top:1px solid #eaf0f6;padding:17px 22px 19px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.btn{appearance:none;border:1px solid #cadbea;background:white;color:#2d4f6c;border-radius:11px;padding:11px 15px;font-size:14px;font-weight:770;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;transition:background .16s,transform .16s}.btn:hover:not(:disabled){background:#eaf3ff}.btn:active:not(:disabled){transform:scale(.97)}.btn:disabled{opacity:.35;cursor:not-allowed}.primary{background:#1468c6;color:white;border-color:#1468c6}.primary:hover:not(:disabled){background:#0a55a6}.ghost{border-color:transparent;background:#eef5fc}.grow{flex:1}.speed{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:670;color:#536d85}.speed input{accent-color:#1468c6;width:92px;cursor:pointer}.speed output{color:#1664b2;min-width:26px}
+.side{padding:21px 18px}.side h3{margin:0 3px 4px;font-size:17px;color:#1c405f}.side p{margin:0 3px 18px;color:#66798a;font-size:13px;line-height:1.45}.steps{display:grid;gap:6px}.step{border:1px solid transparent;border-radius:10px;padding:11px 10px;text-align:left;background:transparent;cursor:pointer;color:#566b80;display:flex;gap:10px;align-items:start}.step:hover{background:#f3f8fc}.step.active{background:#eaf3ff;border-color:#cde1f9;color:#18589a}.num{flex:0 0 auto;display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#edf3f9;color:#4d6c87;font-size:12px;font-weight:850}.active .num{background:#166fc9;color:#fff}.step b{display:block;font-size:13px;line-height:1.3;margin:2px 0 2px}.step small{display:block;font-size:12px;line-height:1.35;color:#8293a1}.active small{color:#5380a9}.foot{margin:16px 2px 0;padding-top:16px;border-top:1px solid #e6edf5;color:#657f95;font-size:12px;line-height:1.55}
+@media(max-width:970px){.layout{grid-template-columns:1fr}.side{padding:17px}.side h3,.side p{margin-left:0}.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.step{padding:9px}.foot{display:none}}
+@media(max-width:970px){.layout{grid-template-columns:1fr}.side{padding:17px}.side h3,.side p{margin-left:0}.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.step{padding:9px}.foot{display:none}.minorrow,.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.majorrow:before{left:15%;right:15%}}
+@media(max-width:600px){body{padding:12px 10px 25px}.top{margin-bottom:14px}.tag{display:none}.panel,.side{border-radius:14px}.panelhead{padding:18px}.panelhead p{font-size:14px;min-height:0}.stagewrap{padding:9px}.intro.visible{padding:10px}.maptitle{font-size:24px;padding:9px 14px;margin-bottom:10px}.majorrow{grid-template-columns:1fr;gap:8px;max-width:310px}.majorrow:before{display:none}.major{min-width:0;width:100%}.minorrow,.cards{grid-template-columns:1fr;gap:10px}.minor{max-width:none}.circlepair{gap:8px;min-height:112px}.thumb{width:96px;height:96px}.goto button{font-size:12px;padding:7px 9px;min-width:88px}.introhint{font-size:11px;margin-top:8px}.toolbar{padding:11px;gap:7px}.btn{font-size:13px;padding:10px}.speed{width:100%;justify-content:center;padding:5px}.legend{padding:10px;font-size:12px}.micro{margin:5px 10px 10px}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.step small{display:none}}
+@media(prefers-reduced-motion:reduce){.btn,.goto button{transition:none}}
+
+/* Versión 8: portada infográfica limpia y navegación a pantalla completa */
+body{padding:12px 17px 16px;min-height:100dvh}
+.shell{max-width:1560px}
+.top{margin-bottom:10px}
+.top h1{font-size:clamp(25px,2.5vw,35px);margin:1px 0}
+.top .eyebrow{font-size:11px}
+.top .sub{font-size:13px}
+.layout{display:block}
+.panel{width:100%;border-radius:17px}
+.panel.intro-mode{box-shadow:0 12px 45px rgba(13,62,117,.07)}
+.panel.intro-mode .panelhead,.panel.intro-mode .legend,.panel.intro-mode .micro,.panel.intro-mode .toolbar{display:none}
+.panel.intro-mode .stagewrap{padding:0}
+.panel.intro-mode .stage{height:calc(100dvh - 113px);min-height:380px;border:0;background:linear-gradient(155deg,#fff 0%,#f9fcff 100%)}
+.panel.intro-mode .stage canvas{display:none}
+.panel.intro-mode .stage .intro{position:absolute;inset:0;padding:clamp(14px,2.8vw,34px);display:flex;overflow:visible;background:none}
+.scheme{width:100%;max-width:1380px;margin:auto;position:relative;isolation:isolate}
+.scheme-connectors{position:absolute;left:0;top:0;width:100%;height:305px;z-index:-1;overflow:visible;pointer-events:none}
+.scheme-connectors line{fill:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.scheme-matter{height:76px;width:min(35%,380px);min-width:205px;background:linear-gradient(180deg,#167ddd,#0757ae);border:3px solid #084b8e;color:white;border-radius:15px;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:clamp(30px,3.5vw,49px);font-weight:850;box-shadow:0 7px 17px #084b8e21;position:relative}
+.scheme-parents{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:68px;margin-bottom:65px}
+.scheme-parent{height:72px;width:min(70%,445px);justify-self:center;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:12px;font-size:clamp(24px,3.2vw,40px);font-weight:850;line-height:1.08;position:relative}
+.pure-parent{border:3px solid #285995;color:#103466;background:linear-gradient(180deg,#dceafa,#c9e0f8)}
+.mix-parent{border:3px solid #288852;color:#164d2c;background:linear-gradient(180deg,#ddf4e4,#c4ebcd)}
+.scheme-categories{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.5vw,22px)}
+.scheme-cat{min-width:0;display:flex;flex-direction:column;gap:18px}
+.scheme-cat h3{height:76px;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-radius:11px;font-size:clamp(18px,2.2vw,27px);line-height:1.13;font-weight:800;position:relative;padding:8px}
+.scheme-cat h3 span{font-size:.74em}
+.pure-cat h3{color:#103a74;border:2px solid #3f96ef;background:linear-gradient(180deg,#e7f2ff,#d9ebff)}
+.mix-cat h3{color:#154f32;border:2px solid #2bb273;background:linear-gradient(180deg,#e5f7e9,#d7f2de)}
+.scheme-actions{display:grid;gap:8px}
+.scheme-actions button{width:100%;min-height:56px;border-radius:11px;border:2px solid #c7d9e8;background:white;color:#294660;box-shadow:0 4px 13px #17375a0b;padding:7px 12px;font-family:inherit;font-size:clamp(14px,1.45vw,18px);font-weight:750;line-height:1.15;cursor:pointer;transition:background .15s, border-color .15s,transform .15s}
+.scheme-actions button:hover,.scheme-actions button:focus-visible{background:#ecf5ff;border-color:#3384d2;outline:2px solid transparent;transform:translateY(-1px)}
+.mix-cat .scheme-actions button:hover,.mix-cat .scheme-actions button:focus-visible{background:#ebf9ef;border-color:#2ba968}
+/* Las visualizaciones no cambian salvo que el lienzo aprovecha el ancho libre. */
+.panel:not(.intro-mode) .stage{display:flex;justify-content:center;align-items:center}
+.panel:not(.intro-mode) .stage canvas{width:min(100%, calc((100dvh - 432px) * 1.95833));height:auto;max-width:100%;margin:auto}
+.panel:not(.intro-mode) .panelhead{padding:14px 24px 11px}
+.panel:not(.intro-mode) .panelhead h2{font-size:24px;margin-bottom:4px}
+.panel:not(.intro-mode) .panelhead p{font-size:14px;min-height:0}
+.panel:not(.intro-mode) .stagewrap{padding:10px 18px 0}
+.panel:not(.intro-mode) .toolbar{padding:10px 18px}
+.panel:not(.intro-mode) .legend{padding-top:8px;min-height:30px}
+.panel:not(.intro-mode) .micro{margin-top:3px;margin-bottom:8px}
+@media(max-height:780px) and (min-width:800px){
+ .scheme-matter{height:61px;font-size:31px}
+ .scheme-parents{margin-top:48px;margin-bottom:42px}
+ .scheme-parent{height:58px;font-size:29px}
+ .scheme-cat h3{height:62px;font-size:21px}
+ .scheme-cat{gap:12px}
+ .scheme-actions{gap:8px}
+ .scheme-actions button{min-height:47px;font-size:16px}
+ .scheme-connectors{height:230px}
+}
+@media(max-width:800px){
+ .panel.intro-mode .stage{height:auto;min-height:calc(100dvh - 125px)}
+ .panel.intro-mode .stage .intro{position:relative;padding:16px;overflow:visible}
+ .scheme-parents{margin-top:44px;margin-bottom:42px}
+ .scheme-parent{font-size:clamp(18px,3.5vw,25px);height:58px;width:85%}
+ .scheme-matter{height:58px;font-size:30px}
+ .scheme-cat h3{height:66px;font-size:17px}
+ .scheme-actions button{font-size:14px;min-height:52px;padding:6px}
+ .scheme-connectors{height:240px}
+ .scheme-connectors line{stroke-width:6}
+}
+@media(max-width:520px){
+ .scheme-categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+ .scheme-connectors{display:none}
+ .scheme-parents{margin-top:15px;margin-bottom:17px;gap:8px}
+ .scheme-parent{width:100%;padding:5px;font-size:19px}
+ .scheme-matter{width:62%;min-width:0}
+ .scheme-cat h3{height:60px;font-size:16px}
+ .scheme-actions{gap:7px}
+ .scheme-actions button{min-height:50px}
+ .panel:not(.intro-mode) .stage canvas{width:100%}
+}
+
+/* V9: interfaz de aula de pantalla completa, lienzo siempre tan grande como permita el monitor. */
+body.scene-mode .top{display:none}
+body.scene-mode .panel:not(.intro-mode) .micro{display:none}
+html,body{height:100%;overflow:hidden}
+body{height:100dvh;min-height:0;padding:7px 12px 9px}
+.shell{height:100%;max-width:none;display:flex;flex-direction:column;min-height:0}
+.top{flex:0 0 auto;margin:0 0 6px;gap:6px}
+.top h1{font-size:clamp(22px,2vw,28px);margin:0;letter-spacing:-.65px}
+.top .eyebrow{font-size:9px;letter-spacing:.75px}
+.top .sub{font-size:11px}
+.tag{font-size:11px;padding:5px 9px}
+.layout{display:flex;flex:1;min-height:0}
+.panel{display:flex;flex-direction:column;height:100%;min-height:0;width:100%;border-radius:14px}
+.panel:not(.intro-mode) .panelhead{padding:7px 14px 7px;flex:0 0 auto}
+.panel:not(.intro-mode) .panelhead .kicker{margin-bottom:3px;font-size:11px}
+.panel:not(.intro-mode) .panelhead h2{font-size:20px;line-height:1.12;margin:0 0 3px}
+.panel:not(.intro-mode) .panelhead p{font-size:12px;line-height:1.26;min-height:0;max-width:none}
+.panel:not(.intro-mode) .stagewrap{flex:1 1 0;min-height:0;padding:4px 9px 0}
+.panel:not(.intro-mode) .stage{display:flex;height:100%;min-height:0;align-items:center;justify-content:center;border-radius:10px}
+.panel:not(.intro-mode) .stage canvas{display:block;width:auto;height:auto;max-width:100%;max-height:100%;margin:auto;flex:none}
+.panel:not(.intro-mode) .legend{padding:5px 14px 2px;min-height:0;font-size:11px;line-height:1.2;gap:5px 14px;flex:0 0 auto}
+.panel:not(.intro-mode) .micro{padding:5px 8px;font-size:10.5px;line-height:1.2;margin:3px 12px 3px;flex:0 0 auto}
+.panel:not(.intro-mode) .toolbar{padding:5px 12px;gap:7px;flex:0 0 auto}
+.panel:not(.intro-mode) .toolbar .btn{font-size:12px;padding:7px 10px;border-radius:8px;min-height:31px}
+.panel:not(.intro-mode) .speed{font-size:11px;gap:5px}
+.panel:not(.intro-mode) .speed input{width:85px}
+.panel.intro-mode .stagewrap{flex:1;min-height:0;padding:0}
+.panel.intro-mode .stage{height:100%;min-height:0}
+.panel.intro-mode .stage .intro{padding:10px 20px;overflow:hidden}
+.panel.intro-mode .scheme{max-width:1260px}
+.panel.intro-mode .scheme-matter{height:clamp(44px,8vh,66px);font-size:clamp(22px,3.7vh,33px)}
+.panel.intro-mode .scheme-parents{margin-top:clamp(17px,5vh,39px);margin-bottom:clamp(16px,5vh,39px)}
+.panel.intro-mode .scheme-parent{height:clamp(45px,8vh,60px);font-size:clamp(19px,3.4vh,29px)}
+.panel.intro-mode .scheme-cat{gap:clamp(6px,1.5vh,13px)}
+.panel.intro-mode .scheme-cat h3{height:clamp(47px,8vh,65px);font-size:clamp(16px,2.9vh,23px)}
+.panel.intro-mode .scheme-actions{gap:clamp(5px,1vh,10px)}
+.panel.intro-mode .scheme-actions button{min-height:clamp(34px,5.8vh,48px);font-size:clamp(13px,2.1vh,17px)}
+@media(max-height:640px) and (min-width:700px){
+ .top .eyebrow,.top .sub,.top .tag{display:none}
+ .panel:not(.intro-mode) .micro{display:none}
+ .panel:not(.intro-mode) .panelhead{padding:5px 12px}
+ .panel:not(.intro-mode) .panelhead h2{font-size:18px}
+ .panel:not(.intro-mode) .panelhead p{font-size:11px}
+ .panel:not(.intro-mode) .legend{padding-top:3px}
+ .panel:not(.intro-mode) .toolbar{padding:4px 9px}
+}
+@media(max-width:650px){
+ html,body{overflow:auto;height:auto;min-height:100%}
+ body{min-height:100dvh;height:auto;padding:5px}
+ .shell{min-height:100dvh;height:auto}
+ .panel.intro-mode .stage .intro{overflow:auto}
+ .panel.intro-mode .stage{height:auto;min-height:580px}
+ .panel.intro-mode .scheme-categories{grid-template-columns:repeat(2,1fr)}
+ .panel:not(.intro-mode) .stagewrap{flex:none}
+ .panel:not(.intro-mode) .stage{height:auto}
+ .panel:not(.intro-mode) .stage canvas{width:100%!important;height:auto!important}
+ .panel:not(.intro-mode) .micro{display:none}
+ .panel:not(.intro-mode) .toolbar{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<main class="shell">
+<header class="top"><div><div class="eyebrow">Física y Química · Simulación interactiva</div><h1>Clasificación de la materia</h1><p class="sub">Observa cómo se organizan las partículas en sustancias puras y mezclas.</p></div><span class="tag">Versión HTML · sin Flash</span></header>
+<div class="layout">
+<section class="panel" aria-label="Simulación">
+<div class="panelhead"><div class="kicker"><span class="pip"></span><span id="counter">Introducción · Pantalla 1 de 13</span></div><h2 id="sceneTitle">¿Cómo se clasifica la materia?</h2><p id="sceneDescription">La materia se puede clasificar en sustancias puras y mezclas. Dentro de cada grupo encontramos distintos tipos.</p></div>
+<div class="stagewrap"><div class="stage"><canvas id="sim" width="940" height="480" aria-label="Modelo de partículas en movimiento"></canvas>
+<div class="intro visible" id="intro">
+  <div class="scheme">
+    <svg class="scheme-connectors" viewBox="0 0 1000 305" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <div class="scheme-matter">Materia</div>
+    <div class="scheme-parents"><div class="scheme-parent pure-parent">Sustancias puras</div><div class="scheme-parent mix-parent">Mezclas</div></div>
+    <div class="scheme-categories">
+      <section class="scheme-cat pure-cat">
+        <h3>Sustancia simple <span>(elemento)</span></h3>
+        <div class="scheme-actions"><button type="button" data-jump="1">Ejemplo 1</button><button type="button" data-jump="2">Ejemplo 2</button><button type="button" data-jump="3">Ejemplo 3</button></div>
+      </section>
+      <section class="scheme-cat pure-cat">
+        <h3>Compuesto</h3>
+        <div class="scheme-actions"><button type="button" data-jump="4">Ejemplo 1</button><button type="button" data-jump="5">Ejemplo 2</button><button type="button" data-jump="6">Ejemplo 3</button></div>
+      </section>
+      <section class="scheme-cat mix-cat">
+        <h3>Mezcla homogénea</h3>
+        <div class="scheme-actions"><button type="button" data-jump="7">Ejemplo 1</button><button type="button" data-jump="8">Ejemplo 2</button><button type="button" data-jump="9">Ejemplo 3</button></div>
+      </section>
+      <section class="scheme-cat mix-cat">
+        <h3>Mezcla heterogénea</h3>
+        <div class="scheme-actions"><button type="button" data-jump="10">Ejemplo 1</button><button type="button" data-jump="11">Ejemplo 2</button><button type="button" data-jump="12">Ejemplo 3</button></div>
+      </section>
+    </div>
+  </div>
+</div></div></div>
+<div class="legend" id="legend"><strong>Clave visual</strong><span>Las esferas representan átomos; las esferas unidas forman moléculas.</span></div>
+<div class="micro" id="tip">Los modelos son esquemáticos: no están a escala y el movimiento representa una agitación simplificada.</div>
+<div class="toolbar"><button type="button" class="btn ghost" id="home">⌂ Clasificación</button><button type="button" class="btn" id="prev" aria-label="Pantalla anterior">‹ Anterior</button><button type="button" class="btn primary" id="next">Siguiente ›</button><button type="button" class="btn ghost" id="pause">Ⅱ Pausar</button><div class="grow"></div><label class="speed" for="speed">Velocidad <input id="speed" type="range" min="0.25" max="3" value="1" step="0.25"><output id="speedval">1×</output></label></div>
+</section>
+</div>
+</main>
+<script>
+'use strict';
+/* Los textos y tipos se pueden modificar aquí. Cada escena corresponde a una pantalla del Flash original. */
+const SCENES = [
+ {title:'¿Cómo se clasifica la materia?',nav:'Clasificación',group:'Introducción',type:'intro',desc:'La materia se puede clasificar en sustancias puras y mezclas. Dentro de cada grupo encontramos distintos tipos.',tip:'Los modelos son esquemáticos: no están a escala y el movimiento representa una agitación simplificada.'},
+ {title:'Sustancia pura: simple',nav:'Átomos individuales',group:'Sustancia pura',type:'single',desc:'Las partículas son átomos individuales de un mismo elemento.',tip:'Todas las partículas son iguales: hay un único elemento y no hay moléculas formadas por varios átomos.'},
+ {title:'Sustancia pura: simple',nav:'Moléculas iguales',group:'Sustancia pura',type:'diAA',desc:'Las partículas son moléculas formadas por dos átomos del mismo tipo.',tip:'Aunque haya dos átomos unidos en cada molécula, solo hay un elemento químico: es una sustancia simple.'},
+ {title:'Sustancia pura: simple',nav:'Moléculas de 3 átomos iguales',group:'Sustancia pura',type:'triAAA',desc:'Las partículas son moléculas lineales formadas por tres átomos iguales.',tip:'Todas las moléculas contienen tres átomos del mismo elemento colocados en línea recta.'},
+ {title:'Sustancia pura: compuesto',nav:'Moléculas de 2 tipos',group:'Sustancia pura',type:'diAB',desc:'Las partículas son moléculas formadas por dos átomos de distinto tipo.',tip:'Todas las moléculas tienen la misma composición. Es una sustancia pura, pero es un compuesto.'},
+ {title:'Sustancia pura: compuesto',nav:'Moléculas de 3 tipos',group:'Sustancia pura',type:'triABC',desc:'Las partículas son moléculas formadas por tres átomos de distinto tipo.',tip:'Los tres colores representan tres elementos diferentes unidos en cada molécula; todas las moléculas son iguales.'},
+ {title:'Sustancia pura: compuesto',nav:'Dos átomos iguales y uno distinto',group:'Sustancia pura',type:'triAAB',desc:'Las partículas son moléculas iguales con dos átomos laterales iguales y un átomo central diferente, más grande.',tip:'Los dos átomos exteriores son iguales y el central es distinto; se trata de un compuesto porque intervienen elementos diferentes.'},
+ {title:'Mezcla: disolución',nav:'Dos compuestos',group:'Mezcla homogénea',type:'mixComp',desc:'Hay dos tipos de partículas. Ambos son moléculas formadas por átomos de distinto tipo: es una mezcla de dos compuestos.',tip:'Los dos tipos de moléculas están distribuidos por todo el recipiente. No hay regiones diferenciadas.'},
+ {title:'Mezcla: disolución',nav:'Elemento + compuesto',group:'Mezcla homogénea',type:'mixSimple',desc:'Hay dos tipos de partículas: moléculas diatómicas formadas por átomos iguales y moléculas formadas por átomos distintos. Es una mezcla de una sustancia simple y un compuesto.',tip:'Las moléculas de la sustancia simple (dos átomos iguales) y del compuesto (átomos diferentes) están distribuidas uniformemente por el recipiente: la mezcla es homogénea.'},
+ {title:'Mezcla: disolución',nav:'Dos elementos monoatómicos',group:'Mezcla homogénea',type:'mixMono',desc:'Hay dos tipos de partículas monoatómicas pertenecientes a elementos distintos. Están mezcladas uniformemente.',tip:'Al haber dos elementos distintos distribuidos homogéneamente, se trata de una mezcla homogénea de dos sustancias simples monoatómicas.'},
+ {title:'Mezcla: heterogénea',nav:'Macropartícula simple',group:'Mezcla heterogénea',type:'heteroSimple',desc:'Hay moléculas de un compuesto y macropartículas de una sustancia simple. Los átomos del agregado tendrían que dispersarse para formar una disolución.',tip:'El agregado representa muchísimos más átomos de los que se dibujan; es una representación simplificada.'},
+ {title:'Mezcla: heterogénea',nav:'Macropartícula compuesta',group:'Mezcla heterogénea',type:'heteroCompound',desc:'Hay átomos individuales de una sustancia simple y macropartículas de un compuesto. Sus moléculas tendrían que dispersarse para formar una disolución.',tip:'Las macropartículas son agrupaciones grandes: la representación esquemática no reproduce tamaños reales.'},
+ {title:'Mezcla: heterogénea',nav:'Dos macromoléculas y un compuesto pequeño',group:'Mezcla heterogénea',type:'heteroDual',desc:'Aparecen dos macromoléculas de compuestos distintos y de diferente tamaño, junto con moléculas más pequeñas de un tercer compuesto.',tip:'Se distinguen claramente partículas grandes diferentes y moléculas pequeñas repartidas por el recipiente: es una mezcla heterogénea.'}
+];
+const COLORS={a:'#1c80d6',b:'#f08b35',c:'#a45bcb',d:'#27a58f',e:'#e45e76'};
+const SPECIES={single:['a'],monoD:['d'],diAA:['a','a'],diDD:['d','d'],diAB:['a','b'],triAAA:['a','a','a'],triABC:['a','b','c'],triAAB:['e','b','e'],diCD:['c','d'],monoC:['c']};
+const canvas=document.getElementById('sim'),ctx=canvas.getContext('2d');
+const cw=canvas.width,ch=canvas.height,field={l:43,r:cw-43,t:39,b:ch-39};
+const intro=document.getElementById('intro'),panelTitle=document.getElementById('sceneTitle'),panelDesc=document.getElementById('sceneDescription'),legend=document.getElementById('legend'),tip=document.getElementById('tip');
+const btnHome=document.getElementById('home'),btnPrev=document.getElementById('prev'),btnNext=document.getElementById('next'),btnPause=document.getElementById('pause'),slider=document.getElementById('speed'),sliderVal=document.getElementById('speedval');
+
+let sceneIndex=0,particles=[],paused=false,speed=1,seed=1,lastTime=0,selected=null;
+function random(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}
+function rng(a,b){return a+(b-a)*random()}
+function radFor(s){return s==='triABC'||s==='triAAA'||s==='triAAB'?27:s==='diAB'?24:s==='diAA'||s==='diDD'||s==='diCD'?20:s==='monoD'?14:14}
+function makeParticle(spec,x,y){const a=rng(0,Math.PI*2),v=rng(30,58);return {spec,x,y,angle:rng(0,6.28),rot:rng(-.95,.95),vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:radFor(spec)}}
+function atSafe(spec,existing){let x,y;for(let tries=0;tries<230;tries++){
+ x=rng(field.l+35,field.r-35);y=rng(field.t+37,field.b-37);
+ if(existing.every(p=>Math.hypot(p.x-x,p.y-y)>p.r+radFor(spec)+13) && (!SCENES[sceneIndex].type.startsWith('hetero')||Math.hypot(x-252,y-207)>142&&Math.hypot(x-650,y-249)>125))break;
+ }return makeParticle(spec,x,y)
+}
+function init(){seed=(29173+sceneIndex*14783)>>>0;particles=[];selected=null;const type=SCENES[sceneIndex].type;if(type==='intro')return;
+ let defs=[];
+ switch(type){case'single':defs=Array(29).fill('single');break;case'diAA':defs=Array(24).fill('diAA');break;case'triAAA':defs=Array(18).fill('triAAA');break;case'diAB':defs=Array(24).fill('diAB');break;case'triABC':defs=Array(20).fill('triABC');break;case'triAAB':defs=Array(20).fill('triAAB');break;
+ case'mixComp':defs=[...Array(12).fill('diAB'),...Array(12).fill('diCD')];break;
+ case'mixSimple':defs=[...Array(14).fill('diDD'),...Array(12).fill('diAB')];break;
+ case'mixMono':defs=[...Array(16).fill('single'),...Array(16).fill('monoD')];break;
+ case'heteroSimple':defs=Array(22).fill('diAB');break;case'heteroCompound':defs=Array(23).fill('single');break;case'heteroDual':defs=Array(18).fill('diCD');break;}
+ for(let i=defs.length-1;i>0;i--){let j=Math.floor(random()*(i+1));[defs[i],defs[j]]=[defs[j],defs[i]]}
+ for(const s of defs)particles.push(atSafe(s,particles));
+ if(type==='heteroSimple'||type==='heteroCompound'){
+  let spec=type==='heteroSimple'?'macroSimple':'macroCompound';
+  particles.push(makeMacro(spec,252,208,92,30,.68,.28));
+  particles.push(makeMacro(spec,670,255,-84,-25,-.81,1.4));
+ }else if(type==='heteroDual'){
+  particles.push(makeMacro('macroCompound',248,214,88,24,.62,.25,1.0));
+  particles.push(makeMacro('macroCompoundAlt',692,245,-70,-20,-.86,1.1,.74));
+ }
+}
+
+// Agregados para las escenas 8 y 9: sin relleno de contorno.
+// La escena 8 usa un agregado irregular de un solo elemento.
+// La escena 9 usa una red ortogonal con uniones de 90°, sin contorno de relleno.
+function createOutline(baseRadius=90,count=18,jitter=9,scale=1){
+ baseRadius*=scale;jitter*=scale;
+ const points=[];
+ const phase=rng(-Math.PI,Math.PI),aspect=rng(.87,.95);
+ for(let i=0;i<count;i++){
+  const a=-Math.PI+i*Math.PI*2/count;
+  const radius=baseRadius+7*Math.sin(3*a+phase)+4*Math.cos(5*a-phase*.6)+rng(-jitter,jitter);
+  points.push({x:radius*Math.cos(a),y:radius*Math.sin(a)*aspect,r:radius});
+ }
+ return {points,aspect};
+}
+function createMacroSimpleShape(scale=1){
+ const outline=createOutline(88,19,10,scale),shape={...outline,kind:'simple',sites:[],links:[]};
+ const spacing=18*scale;let row=0;
+ for(let y=-94;y<=94;y+=spacing*.88){
+  const offset=(row++%2)*spacing*.5;
+  for(let x=-100;x<=100;x+=spacing){
+   const xx=x+offset+rng(-4,4),yy=y+rng(-4,4);
+   const tilt=.18,X=xx*Math.cos(tilt)-yy*Math.sin(tilt),Y=xx*Math.sin(tilt)+yy*Math.cos(tilt);
+   if(!macroContains(shape,X,Y,12))continue;
+   shape.sites.push({x:X,y:Y});
+  }
+ }
+ for(let i=0;i<shape.sites.length;i++)for(let j=i+1;j<shape.sites.length;j++){
+  const a=shape.sites[i],b=shape.sites[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+  if(d<22)shape.links.push([i,j]);
+ }
+ return shape;
+}
+function createMacroCompoundShape(scale=1){
+ // Red cristalina de retícula ortogonal: enlaces exclusivamente horizontales
+ // y verticales, formando ángulos de 90°. El borde queda irregular por
+ // la selección de nodos, sin contorno coloreado ni relleno.
+ const shape={kind:'compound',nodes:[],bridges:[],edges:[]};
+ const spacing=28*scale,indices=new Map();
+ for(let row=-3;row<=3;row++)for(let col=-3;col<=3;col++){
+  // Base redondeada, con pequeñas variaciones entre agregados en el perímetro.
+  const d=Math.hypot(col*spacing,row*spacing);
+  const cutoff=(87+(Math.abs(row)===3||Math.abs(col)===3 ? rng(-9,6) : 7))*scale;
+  if(d>cutoff)continue;
+  const index=shape.nodes.length;
+  shape.nodes.push({x:col*spacing,y:row*spacing});
+  indices.set(`${col},${row}`,index);
+ }
+ for(let row=-3;row<=3;row++)for(let col=-3;col<=3;col++){
+  const i=indices.get(`${col},${row}`);
+  if(i===undefined)continue;
+  // Siempre vecinos ortogonales (nunca diagonales).
+  for(const [dc,dr] of [[1,0],[0,1]]){
+   const j=indices.get(`${col+dc},${row+dr}`);
+   if(j===undefined)continue;
+   const a=shape.nodes[i],b=shape.nodes[j];
+   const m=shape.bridges.length;
+   shape.bridges.push({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
+   shape.edges.push({a:i,b:j,m});
+  }
+ }
+ return shape;
+}
+function createMacroShape(spec,scale=1){return (spec==='macroCompound'||spec==='macroCompoundAlt')?createMacroCompoundShape(scale):createMacroSimpleShape(scale)}
+function macroContains(shape,x,y,margin){
+ let a=Math.atan2(y,x/shape.aspect),u=(a+Math.PI)/(2*Math.PI)*shape.points.length;
+ u=(u%shape.points.length+shape.points.length)%shape.points.length;
+ const i=Math.floor(u),f=u-i;
+ const radius=shape.points[i].r*(1-f)+shape.points[(i+1)%shape.points.length].r*f;
+ return Math.hypot(x,y/shape.aspect)<radius-margin;
+}
+function makeMacro(spec,x,y,vx,vy,rot,angle,scale=1){
+ return {spec,x,y,vx,vy,angle,rot,r:108*scale,macro:true,scale,shape:createMacroShape(spec,scale)};
+}
+function drawAtom(x,y,r,key){const c=COLORS[key]||key;ctx.save();ctx.shadowColor='#163d5b33';ctx.shadowBlur=4;ctx.shadowOffsetY=2;ctx.beginPath();ctx.arc(x,y,r,0,6.2832);ctx.fillStyle=c;ctx.fill();ctx.shadowColor='transparent';let grad=ctx.createRadialGradient(x-r*.45,y-r*.55,0,x,y,r);grad.addColorStop(0,'#ffffffaf');grad.addColorStop(.32,'#ffffff32');grad.addColorStop(1,'#00000030');ctx.fillStyle=grad;ctx.fill();ctx.strokeStyle='#163e5c40';ctx.lineWidth=1.5;ctx.stroke();ctx.restore()}
+function drawBond(x1,y1,x2,y2,width=6,color='#637487'){
+ ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore();
+}
+function drawMolecule(p){if(!SPECIES[p.spec])return;
+ ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);
+ if(p.spec==='single'){drawAtom(0,0,11.6,'a');ctx.restore();return}
+ if(p.spec==='monoD'){drawAtom(0,0,11.6,'d');ctx.restore();return}
+ if(p.spec==='diAA'){drawBond(-10,0,10,0);drawAtom(-10,0,11.6,'a');drawAtom(10,0,11.6,'a');ctx.restore();return}
+ if(p.spec==='diDD'){drawBond(-10,0,10,0);drawAtom(-10,0,11.6,'d');drawAtom(10,0,11.6,'d');ctx.restore();return}
+ if(p.spec==='triAAA'){
+  drawBond(-18,0,0,0,6,'#637487');drawBond(0,0,18,0,6,'#637487');
+  drawAtom(-18,0,9.8,'a');drawAtom(0,0,9.8,'a');drawAtom(18,0,9.8,'a');
+  ctx.restore();return
+ }
+ if(p.spec==='diAB'){
+  const isMixture=SCENES[sceneIndex].type==='mixComp';
+  const radiusBlue=isMixture?11.3:13.3;
+  const radiusYellow=isMixture?11.3:8.5;
+  drawBond(-9,0,9,0,6,'#6a7f91');
+  if(isMixture){
+   drawAtom(-9,0,radiusYellow,'#f2cf37');
+   drawAtom(9,0,radiusBlue,'#2f78d7');
+  }else{
+   drawAtom(-9,0,radiusBlue,'a');
+   drawAtom(9,0,radiusYellow,'b');
+  }
+  ctx.restore();return
+ }
+ if(p.spec==='diCD'){
+  const isMixComp=SCENES[sceneIndex].type==='mixComp';
+  drawBond(-10,0,10,0,6,'#6a7f91');
+  if(isMixComp){drawAtom(-10,0,10.8,'#111111');drawAtom(10,0,10.8,'#df3b3b')}
+  else{drawAtom(-10,0,11.6,'c');drawAtom(10,0,11.6,'d')}
+  ctx.restore();return
+ }
+ if(p.spec==='triABC'){
+  const left=[-18,10.4],center=[0,0],right=[18,10.4];
+  drawBond(center[0],center[1],left[0],left[1],6,'#7b7d88');
+  drawBond(center[0],center[1],right[0],right[1],6,'#7b7d88');
+  drawAtom(left[0],left[1],8.2,'#df3b3b');
+  drawAtom(center[0],center[1],13,'#f2cf37');
+  drawAtom(right[0],right[1],10.5,'#2f78d7');
+  ctx.restore();return
+ }
+ if(p.spec==='triAAB'){
+  const left=[-18,10.4],center=[0,0],right=[18,10.4];
+  drawBond(center[0],center[1],left[0],left[1],6,'#7b7d88');
+  drawBond(center[0],center[1],right[0],right[1],6,'#7b7d88');
+  drawAtom(left[0],left[1],8.6,'#2f78d7');
+  drawAtom(center[0],center[1],13,'#f2cf37');
+  drawAtom(right[0],right[1],8.6,'#2f78d7');
+  ctx.restore();return
+ }
+ ctx.restore();
+}
+function drawMacro(p,t){
+ ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);
+ const shape=p.shape;
+ if(shape.kind==='compound'){
+  const alt=p.spec==='macroCompoundAlt';
+  const bondColor=alt?'#4d7c6db8':'#7b6788b0';
+  const nodeColor=alt?'#2aa46b':'#6f81b4';
+  const bridgeColor=alt?'#a45bcb':'#c4895a';
+  const nodeR=alt?10.2:12.2, bridgeR=alt?5.5:6.3;
+  for(const edge of shape.edges){
+   const a=shape.nodes[edge.a],b=shape.nodes[edge.b],m=shape.bridges[edge.m];
+   drawBond(a.x,a.y,m.x,m.y,5,bondColor);
+   drawBond(m.x,m.y,b.x,b.y,5,bondColor);
+  }
+  for(const node of shape.nodes)drawAtom(node.x,node.y,nodeR,nodeColor);
+  for(const bridge of shape.bridges)drawAtom(bridge.x,bridge.y,bridgeR,bridgeColor);
+ }else{
+  for(const [i,j] of shape.links){const a=shape.sites[i],b=shape.sites[j];drawBond(a.x,a.y,b.x,b.y,4,'#5e8dc08a')}
+  for(const site of shape.sites)drawAtom(site.x,site.y,8.5,'a');
+ }
+ ctx.restore();
+}
+function paint(){ctx.clearRect(0,0,cw,ch);
+ let g=ctx.createLinearGradient(0,0,0,ch);g.addColorStop(0,'#f8fcff');g.addColorStop(1,'#edf6fe');ctx.fillStyle=g;ctx.fillRect(0,0,cw,ch);
+ ctx.strokeStyle='#c8d9e9';ctx.lineWidth=1;
+ for(let x=48;x<cw;x+=38){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,ch);ctx.globalAlpha=.25;ctx.stroke()}
+ for(let y=42;y<ch;y+=38){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cw,y);ctx.stroke()}ctx.globalAlpha=1;
+ if(sceneIndex===0)return;
+ ctx.save();ctx.fillStyle='#fffdfec7';ctx.strokeStyle='#b1cada';ctx.lineWidth=4;
+ ctx.beginPath();ctx.roundRect(field.l,field.t,field.r-field.l,field.b-field.t,21);ctx.fill();ctx.stroke();ctx.restore();
+ // Recipiente y partículas son un modelo conceptual, no una simulación de interacciones moleculares reales.
+ for(const p of particles){if(p.macro)drawMacro(p,SCENES[sceneIndex].type)}
+ for(const p of particles){if(!p.macro)drawMolecule(p)}
+ if(selected){ctx.save();ctx.strokeStyle='#1267c5';ctx.lineWidth=3;ctx.setLineDash([6,5]);ctx.beginPath();ctx.arc(selected.x,selected.y,selected.r+10,0,6.2832);ctx.stroke();ctx.restore()}
+ ctx.fillStyle='#7390a7';ctx.font='600 14px system-ui, sans-serif';ctx.textAlign='right';ctx.fillText('Modelo esquemático de partículas',field.r-16,field.b+25)
+}
+function move(dt){const mult=speed*dt;
+ for(const p of particles){if(p.macro){
+  p.x+=p.vx*mult;p.y+=p.vy*mult;
+  // Rotación continua de los agregados en ambos sentidos, también entre choques.
+  p.angle+=p.rot*mult;
+  // Rebote dentro del recipiente, teniendo en cuenta el tamaño del agregado.
+  const left=field.l+7+p.r,right=field.r-7-p.r,top=field.t+7+p.r,bottom=field.b-7-p.r;
+  if(p.x<left){p.x=left;p.vx=Math.abs(p.vx)}
+  if(p.x>right){p.x=right;p.vx=-Math.abs(p.vx)}
+  if(p.y<top){p.y=top;p.vy=Math.abs(p.vy)}
+  if(p.y>bottom){p.y=bottom;p.vy=-Math.abs(p.vy)}
+  continue}
+
+ p.x+=p.vx*mult;p.y+=p.vy*mult;p.angle+=p.rot*mult;
+ if(p.x-p.r<field.l+7){p.x=field.l+7+p.r;p.vx=Math.abs(p.vx)}
+ if(p.x+p.r>field.r-7){p.x=field.r-7-p.r;p.vx=-Math.abs(p.vx)}
+ if(p.y-p.r<field.t+7){p.y=field.t+7+p.r;p.vy=Math.abs(p.vy)}
+ if(p.y+p.r>field.b-7){p.y=field.b-7-p.r;p.vy=-Math.abs(p.vy)}
+ }
+ // Colisión elástica de las dos macropartículas (masa equivalente).
+ // Separar los agregados impide que se atraviesen o se queden solapados.
+ const macros=particles.filter(p=>p.macro);
+ if(macros.length===2){
+  const a=macros[0],b=macros[1];let dx=b.x-a.x,dy=b.y-a.y;
+  const dist=Math.hypot(dx,dy)||.001,limit=a.r+b.r;
+  if(dist<limit){
+   const nx=dx/dist,ny=dy/dist,shift=(limit-dist)/2;
+   a.x-=nx*shift;a.y-=ny*shift;b.x+=nx*shift;b.y+=ny*shift;
+   const relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+   if(relative<0){
+    a.vx+=relative*nx;a.vy+=relative*ny;b.vx-=relative*nx;b.vy-=relative*ny;
+    const tangential=(b.vx-a.vx)*(-ny)+(b.vy-a.vy)*nx;
+    a.rot=Math.max(-1.15,Math.min(1.15,a.rot+.08*Math.sign(tangential||1)));
+    b.rot=Math.max(-1.15,Math.min(1.15,b.rot-.08*Math.sign(tangential||1)));
+   }
+  }
+ }
+ // Colisiones esquemáticas entre partículas independientes (sin cambios de identidad molecular).
+ for(let i=0;i<particles.length;i++)for(let j=i+1;j<particles.length;j++){
+  const a=particles[i],b=particles[j];if(a.macro||b.macro)continue;
+  let dx=b.x-a.x,dy=b.y-a.y,dis=Math.hypot(dx,dy)||.001,min=a.r+b.r+3;
+  if(dis<min){let nx=dx/dis,ny=dy/dis,shift=(min-dis)*.5;a.x-=nx*shift;b.x+=nx*shift;a.y-=ny*shift;b.y+=ny*shift;
+   const dot=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+   if(dot<0){a.vx+=dot*nx;b.vx-=dot*nx;a.vy+=dot*ny;b.vy-=dot*ny}
+  }
+ }
+ if(SCENES[sceneIndex].type.startsWith('hetero')){for(const a of particles){if(a.macro)continue;for(const b of particles){if(!b.macro)continue;
+ let dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy)||.01,lim=b.r+a.r+6;if(dist<lim){let nx=dx/dist,ny=dy/dist;a.x=b.x+nx*lim;a.y=b.y+ny*lim;const vn=a.vx*nx+a.vy*ny;if(vn<0){a.vx-=2*vn*nx;a.vy-=2*vn*ny}}}}
+ }
+}
+function frame(now){let dt=Math.min((now-lastTime)/1000||0,.05);lastTime=now;if(!paused&&sceneIndex>0)move(dt);paint();requestAnimationFrame(frame)}
+function legendData(type){if(type==='intro')return [];
+ let pairs=[];if(type==='single')pairs=[['a','Átomos del mismo elemento']];
+ if(type==='diAA')pairs=[['a','Moléculas diatómicas del mismo elemento']];
+ if(type==='triAAA')pairs=[['a','Moléculas lineales de 3 átomos iguales']];
+ if(type==='diAB')pairs=[['a','Elemento A'],['b','Elemento B']];
+ if(type==='triABC')pairs=[['#df3b3b','Elemento rojo'],['#f2cf37','Elemento amarillo'],['#2f78d7','Elemento azul']];
+ if(type==='triAAB')pairs=[['#2f78d7','Átomos laterales iguales'],['#f2cf37','Átomo central diferente']];
+ if(type==='mixComp')pairs=[['#f2cf37','Compuesto amarillo-azul'],['#111111','Compuesto negro-rojo']];
+ if(type==='mixSimple')pairs=[['d','Moléculas del elemento (X₂)'],['b','Moléculas del compuesto A–B']];
+ if(type==='mixMono')pairs=[['a','Elemento monoatómico A'],['d','Elemento monoatómico B']];
+ if(type==='heteroSimple')pairs=[['a','Sustancia simple agrupada'],['b','Moléculas del compuesto A–B']];
+ if(type==='heteroCompound')pairs=[['#6f81b4','Compuesto agrupado'],['a','Átomos individuales']];
+ if(type==='heteroDual')pairs=[['#6f81b4','Macromolécula 1'],['#2aa46b','Macromolécula 2'],['c','Moléculas del tercer compuesto']];
+ return pairs;
+}
+function setScene(index){sceneIndex=Math.min(SCENES.length-1,Math.max(0,index));const s=SCENES[sceneIndex];panelTitle.textContent=s.title;panelDesc.textContent=s.desc;tip.textContent=s.tip;
+ document.getElementById('counter').textContent=`${s.group} · Pantalla ${sceneIndex+1} de ${SCENES.length}`;
+ intro.classList.toggle('visible',sceneIndex===0);
+ document.querySelector('.panel').classList.toggle('intro-mode',sceneIndex===0);
+ document.body.classList.toggle('scene-mode',sceneIndex!==0);
+ btnHome.disabled=sceneIndex===0;btnPrev.disabled=sceneIndex===0;btnNext.disabled=sceneIndex===SCENES.length-1;btnNext.textContent=sceneIndex===SCENES.length-1?'Última pantalla':'Siguiente ›';
+ btnPause.disabled=sceneIndex===0;
+ const list=legendData(s.type);legend.innerHTML=sceneIndex===0?'<strong>Clave visual</strong><span>Las esferas representan átomos; las esferas unidas forman moléculas.</span>':'<strong>Clave visual</strong>'+list.map(([k,t])=>`<span class="legendentry"><i class="atom" style="background:${COLORS[k]||k}"></i>${t}</span>`).join('');
+
+ init();paint();requestAnimationFrame(fitCanvasToStage);
+}
+btnHome.onclick=()=>setScene(0);btnPrev.onclick=()=>setScene(sceneIndex-1);btnNext.onclick=()=>setScene(sceneIndex+1);
+btnPause.onclick=()=>{paused=!paused;btnPause.textContent=paused?'▶ Reanudar':'Ⅱ Pausar'};
+slider.oninput=()=>{speed=+slider.value;sliderVal.textContent=`${speed}×`};
+document.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>setScene(Number(b.dataset.jump)));
+canvas.addEventListener('click',()=>{if(sceneIndex!==0)setScene(0)});
+document.addEventListener('keydown',event=>{if(event.target?.matches('input,button'))return;if(event.key==='ArrowLeft')setScene(sceneIndex-1);if(event.key==='ArrowRight')setScene(sceneIndex+1);if(event.code==='Space'){event.preventDefault();btnPause.click()}});
+
+function updateSchemeConnectors(){
+ const scheme=document.querySelector('.scheme');
+ const svg=scheme?.querySelector('.scheme-connectors');
+ if(!scheme||!svg)return;
+ const rect=scheme.getBoundingClientRect();
+ const center=(el,bottom)=>{
+  const r=el.getBoundingClientRect();
+  return {x:(r.left+r.right)*.5-rect.left,y:(bottom?r.bottom:r.top)-rect.top};
+ };
+ const root=center(scheme.querySelector('.scheme-matter'),true);
+ const parents=[...scheme.querySelectorAll('.scheme-parent')];
+ const categories=[...scheme.querySelectorAll('.scheme-cat h3')];
+ const lines=[];
+ parents.forEach((parent,i)=>{
+  const a=center(parent,false),b=center(parent,true);
+  lines.push(`<line x1="${root.x}" y1="${root.y}" x2="${a.x}" y2="${a.y}" stroke="#1278d5"/>`);
+  for(let j=i*2;j<i*2+2;j++){
+   const c=center(categories[j],false);
+   lines.push(`<line x1="${b.x}" y1="${b.y}" x2="${c.x}" y2="${c.y}" stroke="${i?'#12a663':'#358fe0'}"/>`);
+  }
+ });
+ svg.setAttribute('viewBox',`0 0 ${rect.width} ${rect.height}`);
+ svg.style.height=`${rect.height}px`;
+ svg.innerHTML=lines.join('');
+}
+window.addEventListener('resize',updateSchemeConnectors);
+
+
+function fitCanvasToStage(){
+ if(sceneIndex===0)return;
+ const stage=canvas.parentElement;
+ const w=Math.max(1,stage.clientWidth-2),h=Math.max(1,stage.clientHeight-2);
+ const factor=Math.min(w/cw,h/ch);
+ canvas.style.width=`${(cw*factor).toFixed(2)}px`;
+ canvas.style.height=`${(ch*factor).toFixed(2)}px`;
+}
+const canvasResizeObserver=new ResizeObserver(()=>fitCanvasToStage());
+canvasResizeObserver.observe(canvas.parentElement);
+window.addEventListener('resize',()=>{fitCanvasToStage();updateSchemeConnectors()});
+
+setScene(0);updateSchemeConnectors();requestAnimationFrame(frame);
+</script>
+</body>
+</html>
