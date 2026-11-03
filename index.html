@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Clasificación de la materia · Simulación interactiva (v11)</title>
+<title>Clasificación de la materia · Simulación interactiva (v13)</title>
 <style>
 :root{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#163047;background:#f5f8fc;--blue:#1267c5;--ink:#17304a;--line:#dce6f0;--shadow:0 16px 44px rgba(28,53,82,.09)}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;padding:23px 20px 36px}.shell{max-width:1200px;margin:auto}
@@ -160,7 +160,7 @@ body{height:100dvh;min-height:0;padding:7px 12px 9px}
 <header class="top"><div><div class="eyebrow">Física y Química · Simulación interactiva</div><h1>Clasificación de la materia</h1><p class="sub">Observa cómo se organizan las partículas en sustancias puras y mezclas.</p></div><span class="tag">Versión HTML · sin Flash</span></header>
 <div class="layout">
 <section class="panel" aria-label="Simulación">
-<div class="panelhead"><div class="kicker"><span class="pip"></span><span id="counter">Introducción · Pantalla 1 de 13</span></div><h2 id="sceneTitle">¿Cómo se clasifica la materia?</h2><p id="sceneDescription">La materia se puede clasificar en sustancias puras y mezclas. Dentro de cada grupo encontramos distintos tipos.</p></div>
+<div class="panelhead"><div class="kicker"><span class="pip"></span><span id="counter">Introducción · Pantalla 1 de 14</span></div><h2 id="sceneTitle">¿Cómo se clasifica la materia?</h2><p id="sceneDescription">La materia se puede clasificar en sustancias puras y mezclas. Dentro de cada grupo encontramos distintos tipos.</p></div>
 <div class="stagewrap"><div class="stage"><canvas id="sim" width="940" height="480" aria-label="Modelo de partículas en movimiento"></canvas>
 <div class="intro visible" id="intro">
   <div class="scheme">
@@ -178,11 +178,11 @@ body{height:100dvh;min-height:0;padding:7px 12px 9px}
       </section>
       <section class="scheme-cat mix-cat">
         <h3>Mezcla homogénea</h3>
-        <div class="scheme-actions"><button type="button" data-jump="7">Ejemplo 1</button><button type="button" data-jump="8">Ejemplo 2</button><button type="button" data-jump="9">Ejemplo 3</button></div>
+        <div class="scheme-actions"><button type="button" data-jump="7">Ejemplo 1</button><button type="button" data-jump="8">Ejemplo 2</button><button type="button" data-jump="9">Ejemplo 3</button><button type="button" data-jump="10">Ejemplo 4</button></div>
       </section>
       <section class="scheme-cat mix-cat">
         <h3>Mezcla heterogénea</h3>
-        <div class="scheme-actions"><button type="button" data-jump="10">Ejemplo 1</button><button type="button" data-jump="11">Ejemplo 2</button><button type="button" data-jump="12">Ejemplo 3</button></div>
+        <div class="scheme-actions"><button type="button" data-jump="11">Ejemplo 1</button><button type="button" data-jump="12">Ejemplo 2</button><button type="button" data-jump="13">Ejemplo 3</button></div>
       </section>
     </div>
   </div>
@@ -204,15 +204,16 @@ const SCENES = [
  {title:'Sustancia pura: compuesto',nav:'Moléculas de 2 tipos',group:'Sustancia pura',type:'diAB',desc:'Las partículas son moléculas formadas por dos átomos de distinto tipo.',tip:'Todas las moléculas tienen la misma composición. Es una sustancia pura, pero es un compuesto.'},
  {title:'Sustancia pura: compuesto',nav:'Moléculas de 3 tipos',group:'Sustancia pura',type:'triABC',desc:'Las partículas son moléculas formadas por tres átomos de distinto tipo.',tip:'Los tres colores representan tres elementos diferentes unidos en cada molécula; todas las moléculas son iguales.'},
  {title:'Sustancia pura: compuesto',nav:'Dos átomos iguales y uno distinto',group:'Sustancia pura',type:'triAAB',desc:'Las partículas son moléculas iguales con dos átomos laterales iguales y un átomo central diferente, más grande.',tip:'Los dos átomos exteriores son iguales y el central es distinto; se trata de un compuesto porque intervienen elementos diferentes.'},
- {title:'Mezcla: disolución',nav:'Dos compuestos',group:'Mezcla homogénea',type:'mixComp',desc:'Hay dos tipos de partículas. Ambos son moléculas formadas por átomos de distinto tipo: es una mezcla de dos compuestos.',tip:'Los dos tipos de moléculas están distribuidos por todo el recipiente. No hay regiones diferenciadas.'},
- {title:'Mezcla: disolución',nav:'Elemento + compuesto',group:'Mezcla homogénea',type:'mixSimple',desc:'Hay dos tipos de partículas: moléculas diatómicas formadas por átomos iguales y moléculas formadas por átomos distintos. Es una mezcla de una sustancia simple y un compuesto.',tip:'Las moléculas de la sustancia simple (dos átomos iguales) y del compuesto (átomos diferentes) están distribuidas uniformemente por el recipiente: la mezcla es homogénea.'},
  {title:'Mezcla: disolución',nav:'Dos elementos monoatómicos',group:'Mezcla homogénea',type:'mixMono',desc:'Hay dos tipos de partículas monoatómicas pertenecientes a elementos distintos. Están mezcladas uniformemente.',tip:'Al haber dos elementos distintos distribuidos homogéneamente, se trata de una mezcla homogénea de dos sustancias simples monoatómicas.'},
+ {title:'Mezcla: disolución',nav:'Elemento + compuesto',group:'Mezcla homogénea',type:'mixSimple',desc:'Hay dos tipos de partículas: moléculas diatómicas formadas por átomos iguales y moléculas formadas por átomos distintos. Es una mezcla de una sustancia simple y un compuesto.',tip:'Las moléculas de la sustancia simple (dos átomos iguales) y del compuesto (átomos diferentes) están distribuidas uniformemente por el recipiente: la mezcla es homogénea.'},
+ {title:'Mezcla: disolución',nav:'Triatómicas amarillas + diatómicas rojas',group:'Mezcla homogénea',type:'mixTriDi',desc:'Hay una mezcla homogénea de dos sustancias: unas moléculas lineales formadas por tres bolitas amarillas y otras moléculas diatómicas formadas por dos bolitas rojas iguales.',tip:'Ambos tipos de moléculas están repartidos uniformemente por el recipiente, sin distinguirse regiones separadas.'},
+ {title:'Mezcla: disolución',nav:'Dos compuestos',group:'Mezcla homogénea',type:'mixComp',desc:'Hay dos tipos de partículas. Ambos son moléculas formadas por átomos de distinto tipo: es una mezcla de dos compuestos.',tip:'Los dos tipos de moléculas están distribuidos por todo el recipiente. No hay regiones diferenciadas.'},
  {title:'Mezcla: heterogénea',nav:'Macropartícula simple',group:'Mezcla heterogénea',type:'heteroSimple',desc:'Hay moléculas de un compuesto y macropartículas de una sustancia simple. Los átomos del agregado tendrían que dispersarse para formar una disolución.',tip:'El agregado representa muchísimos más átomos de los que se dibujan; es una representación simplificada.'},
  {title:'Mezcla: heterogénea',nav:'Macropartícula compuesta',group:'Mezcla heterogénea',type:'heteroCompound',desc:'Hay átomos individuales de una sustancia simple y macropartículas de un compuesto. Sus moléculas tendrían que dispersarse para formar una disolución.',tip:'Las macropartículas son agrupaciones grandes: la representación esquemática no reproduce tamaños reales.'},
  {title:'Mezcla: heterogénea',nav:'Dos macromoléculas y un compuesto pequeño',group:'Mezcla heterogénea',type:'heteroDual',desc:'Aparecen dos macromoléculas de compuestos distintos y de diferente tamaño, junto con moléculas más pequeñas de un tercer compuesto.',tip:'Se distinguen claramente partículas grandes diferentes y moléculas pequeñas repartidas por el recipiente: es una mezcla heterogénea.'}
 ];
 const COLORS={a:'#1c80d6',b:'#f08b35',c:'#a45bcb',d:'#27a58f',e:'#e45e76'};
-const SPECIES={single:['a'],monoD:['d'],diAA:['a','a'],diDD:['d','d'],diAB:['a','b'],triAAA:['a','a','a'],triABC:['a','b','c'],triAAB:['e','b','e'],diCD:['c','d'],monoC:['c']};
+const SPECIES={single:['a'],monoD:['d'],diAA:['a','a'],diDD:['d','d'],diRR:['e','e'],diAB:['a','b'],triAAA:['a','a','a'],triYYY:['b','b','b'],triABC:['a','b','c'],triAAB:['e','b','e'],diCD:['c','d'],monoC:['c']};
 const canvas=document.getElementById('sim'),ctx=canvas.getContext('2d');
 const cw=canvas.width,ch=canvas.height,field={l:43,r:cw-43,t:39,b:ch-39};
 const intro=document.getElementById('intro'),panelTitle=document.getElementById('sceneTitle'),panelDesc=document.getElementById('sceneDescription'),legend=document.getElementById('legend'),tip=document.getElementById('tip');
@@ -221,7 +222,7 @@ const btnHome=document.getElementById('home'),btnPrev=document.getElementById('p
 let sceneIndex=0,particles=[],paused=false,speed=1,seed=1,lastTime=0,selected=null;
 function random(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}
 function rng(a,b){return a+(b-a)*random()}
-function radFor(s){return s==='triABC'||s==='triAAA'||s==='triAAB'?27:s==='diAB'?24:s==='diAA'||s==='diDD'||s==='diCD'?20:s==='monoD'?14:14}
+function radFor(s){return s==='triABC'||s==='triAAA'||s==='triAAB'||s==='triYYY'?27:s==='diAB'?24:s==='diAA'||s==='diDD'||s==='diCD'||s==='diRR'?20:s==='monoD'?14:14}
 function makeParticle(spec,x,y){const a=rng(0,Math.PI*2),v=rng(30,58);return {spec,x,y,angle:rng(0,6.28),rot:rng(-.95,.95),vx:Math.cos(a)*v,vy:Math.sin(a)*v,r:radFor(spec)}}
 function atSafe(spec,existing){let x,y;for(let tries=0;tries<230;tries++){
  x=rng(field.l+35,field.r-35);y=rng(field.t+37,field.b-37);
@@ -234,6 +235,7 @@ function init(){seed=(29173+sceneIndex*14783)>>>0;particles=[];selected=null;con
  case'mixComp':defs=[...Array(12).fill('diAB'),...Array(12).fill('diCD')];break;
  case'mixSimple':defs=[...Array(14).fill('diDD'),...Array(12).fill('diAB')];break;
  case'mixMono':defs=[...Array(16).fill('single'),...Array(16).fill('monoD')];break;
+ case'mixTriDi':defs=[...Array(14).fill('triYYY'),...Array(14).fill('diRR')];break;
  case'heteroSimple':defs=Array(22).fill('diAB');break;case'heteroCompound':defs=Array(23).fill('single');break;case'heteroDual':defs=Array(18).fill('diCD');break;}
  for(let i=defs.length-1;i>0;i--){let j=Math.floor(random()*(i+1));[defs[i],defs[j]]=[defs[j],defs[i]]}
  for(const s of defs)particles.push(atSafe(s,particles));
@@ -333,6 +335,15 @@ function drawMolecule(p){if(!SPECIES[p.spec])return;
  if(p.spec==='triAAA'){
   drawBond(-18,0,0,0,6,'#637487');drawBond(0,0,18,0,6,'#637487');
   drawAtom(-18,0,9.8,'a');drawAtom(0,0,9.8,'a');drawAtom(18,0,9.8,'a');
+  ctx.restore();return
+ }
+ if(p.spec==='triYYY'){
+  drawBond(-18,0,0,0,6,'#8a8a72');drawBond(0,0,18,0,6,'#8a8a72');
+  drawAtom(-18,0,9.8,'#f2cf37');drawAtom(0,0,9.8,'#f2cf37');drawAtom(18,0,9.8,'#f2cf37');
+  ctx.restore();return
+ }
+ if(p.spec==='diRR'){
+  drawBond(-10,0,10,0,6,'#8a6f76');drawAtom(-10,0,10.8,'#df3b3b');drawAtom(10,0,10.8,'#df3b3b');
   ctx.restore();return
  }
  if(p.spec==='diAB'){
@@ -473,6 +484,7 @@ function legendData(type){if(type==='intro')return [];
  if(type==='mixComp')pairs=[['#f2cf37','Compuesto amarillo-azul'],['#111111','Compuesto negro-rojo']];
  if(type==='mixSimple')pairs=[['d','Moléculas del elemento (X₂)'],['b','Moléculas del compuesto A–B']];
  if(type==='mixMono')pairs=[['a','Elemento monoatómico A'],['d','Elemento monoatómico B']];
+ if(type==='mixTriDi')pairs=[['#f2cf37','Moléculas lineales amarillas (3 átomos)'],['#df3b3b','Moléculas diatómicas rojas']];
  if(type==='heteroSimple')pairs=[['a','Sustancia simple agrupada'],['b','Moléculas del compuesto A–B']];
  if(type==='heteroCompound')pairs=[['#6f81b4','Compuesto agrupado'],['a','Átomos individuales']];
  if(type==='heteroDual')pairs=[['#6f81b4','Macromolécula 1'],['#2aa46b','Macromolécula 2'],['c','Moléculas del tercer compuesto']];
